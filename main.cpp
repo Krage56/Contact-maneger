@@ -68,6 +68,7 @@ int main(int c, char** arg){
             else if(ignore_pos == c - 1){
                 addByHand(&file, arg + 2, book);
             }
+            goto end;
             break;
         case 1:
             if(ignore_pos == 1){
@@ -76,6 +77,7 @@ int main(int c, char** arg){
             else if(ignore_pos == c - 1){
                 deleteContact(book, arg[2]);
             }
+            goto end;
             break;
         case 2:
             if(ignore_pos == 1){
@@ -84,6 +86,7 @@ int main(int c, char** arg){
             else if(ignore_pos == c - 1){
                 editContactName(book, arg[2], arg[3]);
             }
+            goto end;
             break;
         case 3:
             if(ignore_pos == 1){
@@ -92,6 +95,7 @@ int main(int c, char** arg){
             else if(ignore_pos == c - 1){
                 editContactPhone(book, arg[2], arg[3]);
             }
+            goto end;
             break;
         case 4:
             if(ignore_pos == 1){
@@ -100,11 +104,13 @@ int main(int c, char** arg){
             else if(ignore_pos == c - 1){
                 editContactGroup(book, arg[2], arg[3]);
             }
+            goto end;
             break;
         case 5:
             for(int i = 0; i < getSize(book); ++i){
                 print(book->data, i);
             }
+            goto end;
             break;
         case 6:
             if(ignore_pos == 1){
@@ -117,6 +123,7 @@ int main(int c, char** arg){
                     print(book->data, findName(book,arg[2]));
                 }
             }
+            goto end;
             break;
         case 7:
             char tmp_str[mem_block];
@@ -133,9 +140,9 @@ int main(int c, char** arg){
                     }
                 }
             }
+            goto end;
             break;
         case 8:
-            //cout << "show-contacts-by-group"<<endl;
             char tmp_str1[mem_block];
             if(ignore_pos == 1){
                 strcpy(tmp_str1, arg[3]);
@@ -157,24 +164,23 @@ int main(int c, char** arg){
                     print(book->data, i);
                 }
             }
+            goto end;
             break;
         default:
             cout << "Incorrect command" << endl;
+            goto end;
             break;
     }
     loc_loop:
-        //loop(book, input, c, arg);
 
         loop(book, input, c, arg);
-        //deleteVector(book);
-        //delete[](input);
 
+    end:
         file.close();
 
         fstream fileIn;
         fileIn.open(file_name, std::ofstream::out | std::ofstream::trunc);
 
-        //filePrint(&fileIn);
         save(&fileIn, book);
 
         deleteVector(book);

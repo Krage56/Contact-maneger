@@ -197,9 +197,9 @@ Vector* contactParsing(fstream *file){
 }
 
 void save(fstream *file, Vector *v){
-    cout << getSize(v) << endl;
+    //cout << getSize(v) << endl;
     for(int i = 0; i < getSize(v); ++i){
-        cout << "here";
+        //cout << "here";
         *file << v->data[i].name << v->data[i].telephone << v->data[i].group << '\n';
         *file << strlen(v->data[i].name) << '\n';
         *file << strlen(v->data[i].telephone) << '\n';
