@@ -87,7 +87,7 @@ int commandParser(fstream *file, int c, char** args, size_t ignore_pose = 1);
 
 bool is_empty_file(fstream *file);
 
-void addByHand(fstream *file, char **args);
+void addByHand(fstream *file, char **args, Vector *v);
 
 void delByHand(fstream *file, char *str);
 

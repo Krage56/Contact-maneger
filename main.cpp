@@ -1,8 +1,9 @@
 #include "head.h"
 
 int main(int c, char** arg){
-    Vector *book = createVector();
+    Vector *book;
     char *input = new char[input_mem];
+    char *file_name;
 
 /*    fstream file;
     file.open("./ex.txt", ios_base::out | ios_base::in);
@@ -30,24 +31,28 @@ int main(int c, char** arg){
     int ignore_pos = -1;
     if(file.is_open()){
         ignore_pos = 1;
+        file_name = arg[1];
         if (c > 2) {
             d = commandParser(&file, c, arg);
         }
         else{
             //cout << is_empty_file(&file) << endl;
-            goto loop;
+            book = contactParsing(&file);
+            goto loc_loop;
         }
     }
     else if(!file.is_open()){
         file.open(arg[c - 1], ios_base::out | ios_base::in);
         if(file.is_open()){
             ignore_pos = c - 1;
+            file_name = arg[c - 1];
             if (c > 2) {
                 d = commandParser(&file, c, arg, c - 1);
             }
             else{
                 //cout << is_empty_file(&file) << endl;
-                goto loop;
+                book = contactParsing(&file);
+                goto loc_loop;
             }
         }
     }
@@ -55,16 +60,17 @@ int main(int c, char** arg){
         return 1;
     }
 
+    book = contactParsing(&file);
 
     switch (d){
         case 0:
             //cout <<"create-contact"<<endl;
             //cout << is_empty_file(&file) << endl;
             if(ignore_pos == 1){
-                addByHand(&file, arg + 3);
+                addByHand(&file, arg + 3, book);
             }
             else if(ignore_pos == c - 1){
-                addByHand(&file, arg + 2);
+                addByHand(&file, arg + 2, book);
             }
             break;
         case 1:
@@ -98,20 +104,23 @@ int main(int c, char** arg){
             cout << "Incorrect command" << endl;
             break;
     }
-    loop:
+    loc_loop:
+        //loop(book, input, c, arg);
+
         loop(book, input, c, arg);
-       /* Vector *book = contactParsing(&file);
-        loop(book, input, c, arg);*/
-        deleteVector(book);
-        delete[](input);
- /*       file.close();
+        //deleteVector(book);
+        //delete[](input);
+
+        file.close();
+
         fstream fileIn;
-        fileIn.open("./ex.txt", std::ofstream::out | std::ofstream::trunc);
-        filePrint(&fileIn);
+        fileIn.open(file_name, std::ofstream::out | std::ofstream::trunc);
+
+        //filePrint(&fileIn);
         save(&fileIn, book);
 
         deleteVector(book);
         delete[](input);
-        fileIn.close();*/
+        fileIn.close();
     return 0;
 }

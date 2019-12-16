@@ -86,26 +86,38 @@ int commandParser(fstream *file, int c, char** args, size_t ignore_pose){
     return mem;
 }
 
-void addByHand(fstream *file, char **args){
+void addByHand(fstream *file, char **args, Vector *v){
     //cout << *(args+0) << " " << *(args+1) << " " << *(args+2) << endl;
     fileAppend(file, *(args + 0));
     *file << *(args + 1) /*<< *(args + 2)*/;
+
+    Contact tmp_contact;
+
     if(strcmp(*(args + 2), "COLLEAGUES")  == 0){
         *file << 3;
+        tmp_contact.group = Contact::COLLEAGUES;
     }
     else if(strcmp(*(args + 2), "FAMILY")  == 0){
         *file << 1;
+        tmp_contact.group = Contact::FAMILY;
     }
     else if(strcmp(*(args + 2), "FRIENDS")  == 0){
         *file << 2;
+        tmp_contact.group = Contact::FRIENDS;
     }
     else{
         *file << 0;
+        tmp_contact.group = Contact::NO_GROUP;
     }
     *file << '\n';
     *file << strlen(*(args + 0)) << '\n'
     << strlen(*(args + 1)) << '\n'
     << 1;
+
+    strcpy(tmp_contact.name, *(args + 0));
+    strcpy(tmp_contact.telephone, *(args + 1));
+    append(v, tmp_contact);
+
 }
 
 int file_lenght(fstream *file){
@@ -124,15 +136,20 @@ int file_lenght(fstream *file){
     }
 }
 
+void clean_char(char *n, size_t size){
+    for(int i = 0; i < size; ++i){
+        n[i] = 0;
+    }
+}
 
 Vector* contactParsing(fstream *file){
     Vector *v = createVector();
 
-    Contact tmp_contact;
-
     char buf[mem_block];
     char tmp_data[mem_block];
     char tmp_str[mem_block];
+
+    Contact tmp_contact;
 
     long name = -1;
     long tel = -1;
@@ -145,7 +162,9 @@ Vector* contactParsing(fstream *file){
         if(i % 4 == 0){
             if(i != 0){
                 append(v, tmp_contact);
-                cout << getSize(v) << endl;
+                clean_char(&(tmp_contact.name[0]), 80);
+                clean_char(&(tmp_contact.telephone[0]), 12);
+                //cout << getSize(v) << endl;
             }
             memcpy(tmp_data, buf, sizeof(char) * strlen(buf));
         }
@@ -155,8 +174,12 @@ Vector* contactParsing(fstream *file){
         }
         if(i % 4 == 2){
             tel = atoi(buf);
-            strcpy(tmp_str, tmp_data + name);
-            memcpy(tmp_contact.telephone, tmp_str, (strlen(tmp_str) - 1)* sizeof(char));
+            //clean_char(&(tmp_str[0]), mem_block);
+            //cout << tmp_str << endl;
+            //strcpy(tmp_str, (tmp_data + name));
+            //cout << tmp_str << endl;
+            memcpy(tmp_contact.telephone, /*tmp_str*/tmp_data + name, (tel) * sizeof(char));
+            //cout << tmp_contact.telephone << endl;
             //cout << *(tmp_data + name + sizeof(char) * tel - 1) << endl;
         }
         if(i % 4 == 3){
