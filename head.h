@@ -26,7 +26,7 @@ typedef struct {
 } Vector;
 
 const size_t input_mem = 1024 + 1;
-const size_t mem_block = 1024;
+const size_t mem_block = 1024 + 1;
 
 Vector *createVector();
 
@@ -90,3 +90,7 @@ bool is_empty_file(fstream *file);
 void addByHand(fstream *file, char **args);
 
 void delByHand(fstream *file, char *str);
+
+Vector* contactParsing(fstream *file);
+
+void save(fstream *file, Vector *v);

@@ -273,5 +273,5 @@ void print(Contact *arr, int i){
     cout << "] ";
     cout << arr[i].name;
     cout << " --- ";
-    cout << arr[i].telephone << endl;
+    cout << arr[i].telephone <</* " " << strlen(arr[i].telephone) <<*/ endl;
 }

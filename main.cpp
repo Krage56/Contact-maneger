@@ -3,6 +3,13 @@
 int main(int c, char** arg){
     Vector *book = createVector();
     char *input = new char[input_mem];
+
+/*    fstream file;
+    file.open("./ex.txt", ios_base::out | ios_base::in);
+    if(!file.is_open()){
+        cout << "error" << endl;
+    }*/
+
     if(strcmp(arg[1], "--help") == 0){
         cout << "Usage: contacts [option] <file>\n"
                 "Options:\n"
@@ -56,12 +63,15 @@ int main(int c, char** arg){
             if(ignore_pos == 1){
                 addByHand(&file, arg + 3);
             }
+            else if(ignore_pos == c - 1){
+                addByHand(&file, arg + 2);
+            }
             break;
         case 1:
-            cout <<"delete-contact"<<endl;
-            if(ignore_pos == 1){
-                delByHand(&file, *(arg + 3));
-            }
+            cout << "delete-contact" << endl;
+//            if(ignore_pos == 1){
+//                delByHand(&file, *(arg + 3));
+//            }
             break;
         case 2:
             cout <<"edit-contact-name"<<endl;
@@ -90,8 +100,18 @@ int main(int c, char** arg){
     }
     loop:
         loop(book, input, c, arg);
+       /* Vector *book = contactParsing(&file);
+        loop(book, input, c, arg);*/
         deleteVector(book);
         delete[](input);
-        file.close();
+ /*       file.close();
+        fstream fileIn;
+        fileIn.open("./ex.txt", std::ofstream::out | std::ofstream::trunc);
+        filePrint(&fileIn);
+        save(&fileIn, book);
+
+        deleteVector(book);
+        delete[](input);
+        fileIn.close();*/
     return 0;
 }

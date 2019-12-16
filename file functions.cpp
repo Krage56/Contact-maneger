@@ -124,12 +124,112 @@ int file_lenght(fstream *file){
     }
 }
 
-void delByHand(fstream *file, char *str){
-    return_in_pos(file, true);
+
+Vector* contactParsing(fstream *file){
+    Vector *v = createVector();
+
+    Contact tmp_contact;
+
+    char buf[mem_block];
+    char tmp_data[mem_block];
+    char tmp_str[mem_block];
+
+    long name = -1;
+    long tel = -1;
+    long group_num = -1;
+    const short len_group_name = 2;
     int i = 0;
-    int file_len = file_lenght(file);
-    cout << file_len << endl;
-//    while(!file->eof() && ){
-//
-//    }
+    return_in_pos(file, true);
+    while(!file->eof()){
+        file->getline(buf, mem_block,'\n');
+        if(i % 4 == 0){
+            if(i != 0){
+                append(v, tmp_contact);
+                cout << getSize(v) << endl;
+            }
+            memcpy(tmp_data, buf, sizeof(char) * strlen(buf));
+        }
+        if(i % 4 == 1){
+            name = atoi(buf);
+            memcpy(tmp_contact.name, tmp_data, sizeof(char) * name);
+        }
+        if(i % 4 == 2){
+            tel = atoi(buf);
+            strcpy(tmp_str, tmp_data + name);
+            memcpy(tmp_contact.telephone, tmp_str, (strlen(tmp_str) - 1)* sizeof(char));
+            //cout << *(tmp_data + name + sizeof(char) * tel - 1) << endl;
+        }
+        if(i % 4 == 3){
+            group_num = atoi(buf);
+            char group_name[2];
+            memcpy(group_name, tmp_data + name + tel, sizeof(char) * group_num);
+            group_num = atoi(group_name);
+            switch (group_num){
+                case (0):
+                    tmp_contact.group = Contact::NO_GROUP;
+                    break;
+                case (1):
+                    tmp_contact.group = Contact::FAMILY;
+                    break;
+                case (2):
+                    tmp_contact.group = Contact::FRIENDS;
+                    break;
+                case (3):
+                    tmp_contact.group = Contact::COLLEAGUES;
+                    break;
+            }
+        }
+        ++i;
+    }
+    return v;
 }
+
+void save(fstream *file, Vector *v){
+    cout << getSize(v) << endl;
+    for(int i = 0; i < getSize(v); ++i){
+        cout << "here";
+        *file << v->data[i].name << v->data[i].telephone << v->data[i].group << '\n';
+        *file << strlen(v->data[i].name) << '\n';
+        *file << strlen(v->data[i].telephone) << '\n';
+        *file << 1 << '\n';
+    }
+}
+
+
+//void delByHand(fstream *file, char *str){
+//    return_in_pos(file, true);
+//    int i = 0;
+//    int file_len = file_lenght(file);
+//    cout << file_len << endl;
+//    char buf[mem_block];
+//    char tmp_data[mem_block];
+//    char tmp_name[mem_block];
+//    long name = -1;
+//    long tel = -1;
+//    long group = -1;
+//    int pos = -1;
+//    bool f = true;
+//    return_in_pos(file, true);
+//    while(!file->eof() && i < file_len && f){
+//        file->getline(buf, mem_block,'\n');
+//        if(i % 4 == 0){
+//            memcpy(tmp_data, buf, sizeof(char) * strlen(buf));
+//        }
+//        if(i % 4 == 1){
+//            name = atoi(buf);
+//            memcpy(tmp_name, tmp_data, name);
+//            if(strcmp(tmp_name, str) == 0){
+//                pos = file->tellp();
+//                f = false;
+//            }
+//        }
+//        if(i % 4 == 2){
+//            tel = atoi(buf);
+//        }
+//        if(i % 4 == 3){
+//            group = atoi(buf);
+//        }
+//        ++i;
+//    }
+//
+//}
