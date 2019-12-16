@@ -208,10 +208,42 @@ void save(fstream *file, Vector *v){
 }
 
 void deleteContact(Vector *v, char *name){
-    //name = nameParser(v, true);
     int f = findName(v, name);
     if(f != -1){
         erase(v, f);
     }
-    //delete[](name);
 }
+
+void editContactName(Vector *v, char *name, char *new_name){
+    int index_name = findName(v, name);
+    if(index_name > -1){
+        strcpy(v->data[index_name].name, new_name);
+    }
+}
+
+void editContactPhone(Vector *v, char *name, char *new_phone){
+    int index_name = findName(v, name);
+    if(index_name > -1){
+        strcpy(v->data[index_name].telephone, new_phone);
+    }
+}
+
+void editContactGroup(Vector *v, char *name, char* group_name){
+    int name_ind = findName(v, name);
+    if(name_ind != -1){
+        if(strcmp(group_name, "COLLEAGUES")  == 0){
+            v->data[name_ind].group = Contact::COLLEAGUES;
+        }
+        else if(strcmp(group_name, "FAMILY")  == 0){
+            v->data[name_ind].group = Contact::FAMILY;
+        }
+        else if(strcmp(group_name, "FRIENDS")  == 0){
+            v->data[name_ind].group = Contact::FRIENDS;
+        }
+        else{
+            v->data[name_ind].group = Contact::NO_GROUP;
+        }
+    }
+
+}
+

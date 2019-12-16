@@ -77,6 +77,7 @@ bool EditContact(Vector *v);
 
 int findName(Vector *v, char a[]);
 
+int findTelephone(Vector *v, char a[]);
 
 
 void filePrint(fstream *file);
@@ -91,10 +92,14 @@ bool is_empty_file(fstream *file);
 
 void addByHand(fstream *file, char **args, Vector *v);
 
-//void delByHand(fstream *file, char *str);
-
 Vector* contactParsing(fstream *file);
 
 void save(fstream *file, Vector *v);
 
 void deleteContact(Vector *v, char *name);
+
+void editContactName(Vector *v, char *name, char *new_name);
+
+void editContactPhone(Vector *v, char *name, char *new_phone);
+
+void editContactGroup(Vector *v, char *name, char* group_name);

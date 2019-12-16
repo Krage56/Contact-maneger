@@ -78,25 +78,85 @@ int main(int c, char** arg){
             }
             break;
         case 2:
-            cout <<"edit-contact-name"<<endl;
+            if(ignore_pos == 1){
+                editContactName(book, arg[3], arg[4]);
+            }
+            else if(ignore_pos == c - 1){
+                editContactName(book, arg[2], arg[3]);
+            }
             break;
         case 3:
-            cout <<"edit-contact-phone"<<endl;
+            if(ignore_pos == 1){
+                editContactPhone(book, arg[3], arg[4]);
+            }
+            else if(ignore_pos == c - 1){
+                editContactPhone(book, arg[2], arg[3]);
+            }
             break;
         case 4:
-            cout <<"edit-contact-group"<<endl;
+            if(ignore_pos == 1){
+                editContactGroup(book, arg[3], arg[4]);
+            }
+            else if(ignore_pos == c - 1){
+                editContactGroup(book, arg[2], arg[3]);
+            }
             break;
         case 5:
-            cout <<"show-contacts"<<endl;
+            for(int i = 0; i < getSize(book); ++i){
+                print(book->data, i);
+            }
             break;
         case 6:
-            cout <<"show-contacts-by-name"<<endl;
+            if(ignore_pos == 1){
+                if(findName(book, arg[3]) != -1){
+                    print(book->data, findName(book,arg[3]));
+                }
+            }
+            else if(ignore_pos == c - 1){
+                if(findName(book, arg[2]) != -1){
+                    print(book->data, findName(book,arg[2]));
+                }
+            }
             break;
         case 7:
-            cout <<"show-contacts-by-phone"<<endl;
+            char tmp_str[mem_block];
+            if(ignore_pos == 1){
+                strcpy(tmp_str, arg[3]);
+            }
+            else if(ignore_pos == c - 1){
+                strcpy(tmp_str, arg[2]);
+            }
+            if(findTelephone(book, tmp_str) != -1){
+                for(int i = 0; i < getSize(book); ++i){
+                    if(strcmp(book->data[i].telephone, tmp_str) == 0){
+                        print(book->data, i);
+                    }
+                }
+            }
             break;
         case 8:
-            cout << "show-contacts-by-group"<<endl;
+            //cout << "show-contacts-by-group"<<endl;
+            char tmp_str1[mem_block];
+            if(ignore_pos == 1){
+                strcpy(tmp_str1, arg[3]);
+            }
+            else if(ignore_pos == c - 1){
+                strcpy(tmp_str1, arg[2]);
+            }
+            for(int i = 0; i < getSize(book); ++i){
+                if((book->data[i].group == Contact::FRIENDS) && (strcmp(tmp_str1, "FRIENDS") == 0)){
+                    print(book->data, i);
+                }
+                if((book->data[i].group == Contact::COLLEAGUES) && (strcmp(tmp_str1, "COLLEAGUES") == 0)){
+                    print(book->data, i);
+                }
+                if((book->data[i].group == Contact::FAMILY) && (strcmp(tmp_str1, "FAMILY") == 0)){
+                    print(book->data, i);
+                }
+                if((book->data[i].group == Contact::NO_GROUP) && (strcmp(tmp_str1, "NO_GROUP") == 0)){
+                    print(book->data, i);
+                }
+            }
             break;
         default:
             cout << "Incorrect command" << endl;
