@@ -18,16 +18,16 @@ void deleteVector(Vector *v){
     }
 }
 
-/*Vector *copyVector(Vector *v){
+Vector *copyVector(Vector *v){
     Vector *new_v = createVector();
     new_v->data = new Contact[v->capacity];
     new_v->size = v->size;
     new_v->capacity = v->capacity;
     memcpy(new_v->data, v->data, sizeof(Contact) * (v->size));
     return new_v;
-}*/
+}
 
-/*void swapVector(Vector *lh, Vector *rh){
+void swapVector(Vector *lh, Vector *rh){
     Vector *tmp = copyVector(lh);
 
     reserve(lh, rh->capacity);
@@ -41,12 +41,12 @@ void deleteVector(Vector *v){
     rh -> capacity = tmp -> capacity;
 
     deleteVector(tmp);
-}*/
+}
 
-/*Contact getValue(Vector *v, size_t index){
+Contact getValue(Vector *v, size_t index){
     if((v -> data) && (getSize(v) > index))
         return (v -> data)[index];
-}*/
+}
 
 size_t getSize(Vector *v){
     return (v -> size);

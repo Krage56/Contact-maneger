@@ -84,3 +84,9 @@ void fileAppend(fstream *file, char *str);
 void return_in_pos(fstream *file, bool pos);
 
 int commandParser(fstream *file, int c, char** args, size_t ignore_pose = 1);
+
+bool is_empty_file(fstream *file);
+
+void addByHand(fstream *file, char **args);
+
+void delByHand(fstream *file, char *str);

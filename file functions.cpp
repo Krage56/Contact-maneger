@@ -59,26 +59,23 @@ int commandParser(fstream *file, int c, char** args, size_t ignore_pose){
             "show-contacts-by-phone",
             "show-contacts-by-group"
     };
-//    if(strcmp(args[1], "--help") == 0){
-//
-//    }
-//    else {
         int mem = -1;
         int opt_pos = -1;
         if(ignore_pose == c - 1){
             opt_pos = 1;
-
+            //cout << "Here" << endl;
             for(int i = 0; i < options; i++){
                 if(strcmp(menu[i], args[opt_pos]) == 0){
                     mem = i;
-                    cout << menu[i] << " " << i << endl;
+                    //cout << menu[i] << " " << i << endl;
                     break;
                 }
+                //cout << menu[i] << " " << args[opt_pos] << " "
+               // << strcmp(menu[i], args[opt_pos]) << endl;
             }
         }
         if(ignore_pose == 1){
             opt_pos = 2;
-
             for(int i = 0; i < options; i++){
                 if(strcmp(menu[i], args[opt_pos]) == 0){
                     mem = i;
@@ -86,42 +83,53 @@ int commandParser(fstream *file, int c, char** args, size_t ignore_pose){
                 }
             }
         }
-        switch (mem){
-            case 0:
-                fileAppend(file, args[opt_pos + 1]);
-                *file << " " << args[opt_pos + 2] << " " << args[opt_pos + 3];
+    return mem;
+}
 
-                break;
-            case 1:
+void addByHand(fstream *file, char **args){
+    //cout << *(args+0) << " " << *(args+1) << " " << *(args+2) << endl;
+    fileAppend(file, *(args + 0));
+    *file << *(args + 1) /*<< *(args + 2)*/;
+    if(strcmp(*(args + 2), "COLLEAGUES")  == 0){
+        *file << 3;
+    }
+    else if(strcmp(*(args + 2), "FAMILY")  == 0){
+        *file << 1;
+    }
+    else if(strcmp(*(args + 2), "FRIENDS")  == 0){
+        *file << 2;
+    }
+    else{
+        *file << 0;
+    }
+    *file << '\n';
+    *file << strlen(*(args + 0)) << '\n'
+    << strlen(*(args + 1)) << '\n'
+    << 1;
+}
 
-                break;
-            case 2:
-
-                break;
-            case 3:
-
-                break;
-            case 4:
-
-                break;
-            case 5:
-
-                break;
-            case 6:
-
-                break;
-            case 7:
-
-                break;
-            case 8:
-
-                break;
+int file_lenght(fstream *file){
+    if(is_empty_file(file)){
+        return 0;
+    }
+    else{
+        return_in_pos(file, true);
+        int count = 0;
+        char buf[mem_block];
+        while (!file->eof()){
+            ++count;
+            file->getline(buf, mem_block, '\n');
         }
+        return count;
+    }
+}
 
-  //  }
-
-//    for(int i = 0; i < options; ++i){
-//        cout << menu[i] << endl;
+void delByHand(fstream *file, char *str){
+    return_in_pos(file, true);
+    int i = 0;
+    int file_len = file_lenght(file);
+    cout << file_len << endl;
+//    while(!file->eof() && ){
+//
 //    }
-    return 0;
 }
