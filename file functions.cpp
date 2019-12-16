@@ -63,15 +63,12 @@ int commandParser(fstream *file, int c, char** args, size_t ignore_pose){
         int opt_pos = -1;
         if(ignore_pose == c - 1){
             opt_pos = 1;
-            //cout << "Here" << endl;
             for(int i = 0; i < options; i++){
                 if(strcmp(menu[i], args[opt_pos]) == 0){
                     mem = i;
-                    //cout << menu[i] << " " << i << endl;
                     break;
                 }
-                //cout << menu[i] << " " << args[opt_pos] << " "
-               // << strcmp(menu[i], args[opt_pos]) << endl;
+
             }
         }
         if(ignore_pose == 1){
@@ -87,9 +84,9 @@ int commandParser(fstream *file, int c, char** args, size_t ignore_pose){
 }
 
 void addByHand(fstream *file, char **args, Vector *v){
-    //cout << *(args+0) << " " << *(args+1) << " " << *(args+2) << endl;
+
     fileAppend(file, *(args + 0));
-    *file << *(args + 1) /*<< *(args + 2)*/;
+    *file << *(args + 1);
 
     Contact tmp_contact;
 
@@ -147,14 +144,13 @@ Vector* contactParsing(fstream *file){
 
     char buf[mem_block];
     char tmp_data[mem_block];
-    char tmp_str[mem_block];
 
     Contact tmp_contact;
 
     long name = -1;
     long tel = -1;
     long group_num = -1;
-    const short len_group_name = 2;
+
     int i = 0;
     return_in_pos(file, true);
     while(!file->eof()){
@@ -164,7 +160,6 @@ Vector* contactParsing(fstream *file){
                 append(v, tmp_contact);
                 clean_char(&(tmp_contact.name[0]), 80);
                 clean_char(&(tmp_contact.telephone[0]), 12);
-                //cout << getSize(v) << endl;
             }
             memcpy(tmp_data, buf, sizeof(char) * strlen(buf));
         }
@@ -174,13 +169,7 @@ Vector* contactParsing(fstream *file){
         }
         if(i % 4 == 2){
             tel = atoi(buf);
-            //clean_char(&(tmp_str[0]), mem_block);
-            //cout << tmp_str << endl;
-            //strcpy(tmp_str, (tmp_data + name));
-            //cout << tmp_str << endl;
-            memcpy(tmp_contact.telephone, /*tmp_str*/tmp_data + name, (tel) * sizeof(char));
-            //cout << tmp_contact.telephone << endl;
-            //cout << *(tmp_data + name + sizeof(char) * tel - 1) << endl;
+            memcpy(tmp_contact.telephone,tmp_data + name, (tel) * sizeof(char));
         }
         if(i % 4 == 3){
             group_num = atoi(buf);
@@ -218,41 +207,11 @@ void save(fstream *file, Vector *v){
     }
 }
 
-
-//void delByHand(fstream *file, char *str){
-//    return_in_pos(file, true);
-//    int i = 0;
-//    int file_len = file_lenght(file);
-//    cout << file_len << endl;
-//    char buf[mem_block];
-//    char tmp_data[mem_block];
-//    char tmp_name[mem_block];
-//    long name = -1;
-//    long tel = -1;
-//    long group = -1;
-//    int pos = -1;
-//    bool f = true;
-//    return_in_pos(file, true);
-//    while(!file->eof() && i < file_len && f){
-//        file->getline(buf, mem_block,'\n');
-//        if(i % 4 == 0){
-//            memcpy(tmp_data, buf, sizeof(char) * strlen(buf));
-//        }
-//        if(i % 4 == 1){
-//            name = atoi(buf);
-//            memcpy(tmp_name, tmp_data, name);
-//            if(strcmp(tmp_name, str) == 0){
-//                pos = file->tellp();
-//                f = false;
-//            }
-//        }
-//        if(i % 4 == 2){
-//            tel = atoi(buf);
-//        }
-//        if(i % 4 == 3){
-//            group = atoi(buf);
-//        }
-//        ++i;
-//    }
-//
-//}
+void deleteContact(Vector *v, char *name){
+    //name = nameParser(v, true);
+    int f = findName(v, name);
+    if(f != -1){
+        erase(v, f);
+    }
+    //delete[](name);
+}

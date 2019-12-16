@@ -36,7 +36,6 @@ int main(int c, char** arg){
             d = commandParser(&file, c, arg);
         }
         else{
-            //cout << is_empty_file(&file) << endl;
             book = contactParsing(&file);
             goto loc_loop;
         }
@@ -50,7 +49,6 @@ int main(int c, char** arg){
                 d = commandParser(&file, c, arg, c - 1);
             }
             else{
-                //cout << is_empty_file(&file) << endl;
                 book = contactParsing(&file);
                 goto loc_loop;
             }
@@ -64,8 +62,6 @@ int main(int c, char** arg){
 
     switch (d){
         case 0:
-            //cout <<"create-contact"<<endl;
-            //cout << is_empty_file(&file) << endl;
             if(ignore_pos == 1){
                 addByHand(&file, arg + 3, book);
             }
@@ -74,10 +70,12 @@ int main(int c, char** arg){
             }
             break;
         case 1:
-            cout << "delete-contact" << endl;
-//            if(ignore_pos == 1){
-//                delByHand(&file, *(arg + 3));
-//            }
+            if(ignore_pos == 1){
+                deleteContact(book, arg[3]);
+            }
+            else if(ignore_pos == c - 1){
+                deleteContact(book, arg[2]);
+            }
             break;
         case 2:
             cout <<"edit-contact-name"<<endl;
