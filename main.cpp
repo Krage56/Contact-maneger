@@ -40,7 +40,7 @@ int main(int c, char** arg){
             goto loc_loop;
         }
     }
-    else if(!file.is_open()){
+    if(!file.is_open()){
         file.open(arg[c - 1], ios_base::out | ios_base::in);
         if(file.is_open()){
             ignore_pos = c - 1;
@@ -54,7 +54,7 @@ int main(int c, char** arg){
             }
         }
     }
-    else if (!file.is_open()){
+    if (!file.is_open()){
         return 1;
     }
 
