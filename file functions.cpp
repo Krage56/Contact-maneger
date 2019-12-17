@@ -4,12 +4,7 @@ bool is_empty_file(fstream *file){
     long file_size;
     file->seekg(0, ios::end);
     file_size = file->tellg();
-    if(file_size == 0){
-        return true;
-    }
-    else{
-        return false;
-    }
+    return (file_size == 0);
 }
 
 void return_in_pos(fstream *file, bool pos){
@@ -17,10 +12,6 @@ void return_in_pos(fstream *file, bool pos){
     pos ? file->seekg(0, ios_base::beg): file->seekg(0, ios_base::end);
 }
 
-void return_in_pos(fstream *file, int pos){
-    file->clear();
-    file->seekg(pos, ios_base::beg);
-}
 
 void filePrint(fstream *file){
     if(!is_empty_file(file)){

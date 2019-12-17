@@ -3,7 +3,7 @@
 int main(int c, char** arg){
     Vector *book;
     char *input = new char[input_mem];
-    char *file_name;
+
 
 /*    fstream file;
     file.open("./ex.txt", ios_base::out | ios_base::in);
@@ -26,36 +26,40 @@ int main(int c, char** arg){
                 ;
     }
     fstream file;
-    file.open(arg[1], ios_base::out | ios_base::in);
-    int d = -1;
+
+    int d = 9;//num of command
     int ignore_pos = -1;
-    if(file.is_open()){
+    char *file_name;
+
+    if(c == 2){
+        file.open(arg[1], ios_base::out | ios_base::in);
+        if(!file.is_open()){
+            cout << "The file is not exist or something going bad" << endl;
+            return -1;
+        }
         ignore_pos = 1;
         file_name = arg[1];
-        if (c > 2) {
-            d = commandParser(&file, c, arg);
-        }
-        else{
-            book = contactParsing(&file);
-            goto loc_loop;
-        }
     }
-    if(!file.is_open()){
-        file.open(arg[c - 1], ios_base::out | ios_base::in);
-        if(file.is_open()){
+    else if(c > 2){
+        file.open(arg[1], ios_base::out | ios_base::in);
+        if(!file.is_open()){
+            file.open(arg[c - 1], ios_base::out | ios_base::in);
+            if(!file.is_open()){
+                cout << "The file is not exist or something going bad" << endl;
+                return -1;
+            }
             ignore_pos = c - 1;
             file_name = arg[c - 1];
-            if (c > 2) {
-                d = commandParser(&file, c, arg, c - 1);
-            }
-            else{
-                book = contactParsing(&file);
-                goto loc_loop;
-            }
+            d = commandParser(&file, c, arg, c - 1);
+        }
+        else if(file.is_open()){
+            ignore_pos = 1;
+            file_name = arg[1];
+            d = commandParser(&file, c, arg);
         }
     }
-    if (!file.is_open()){
-        return 1;
+    else{
+        return -1;
     }
 
     book = contactParsing(&file);
@@ -68,7 +72,6 @@ int main(int c, char** arg){
             else if(ignore_pos == c - 1){
                 addByHand(&file, arg + 2, book);
             }
-            goto end;
             break;
         case 1:
             if(ignore_pos == 1){
@@ -77,7 +80,6 @@ int main(int c, char** arg){
             else if(ignore_pos == c - 1){
                 deleteContact(book, arg[2]);
             }
-            goto end;
             break;
         case 2:
             if(ignore_pos == 1){
@@ -86,7 +88,6 @@ int main(int c, char** arg){
             else if(ignore_pos == c - 1){
                 editContactName(book, arg[2], arg[3]);
             }
-            goto end;
             break;
         case 3:
             if(ignore_pos == 1){
@@ -95,7 +96,6 @@ int main(int c, char** arg){
             else if(ignore_pos == c - 1){
                 editContactPhone(book, arg[2], arg[3]);
             }
-            goto end;
             break;
         case 4:
             if(ignore_pos == 1){
@@ -104,13 +104,11 @@ int main(int c, char** arg){
             else if(ignore_pos == c - 1){
                 editContactGroup(book, arg[2], arg[3]);
             }
-            goto end;
             break;
         case 5:
             for(int i = 0; i < getSize(book); ++i){
                 print(book->data, i);
             }
-            goto end;
             break;
         case 6:
             if(ignore_pos == 1){
@@ -123,7 +121,7 @@ int main(int c, char** arg){
                     print(book->data, findName(book,arg[2]));
                 }
             }
-            goto end;
+
             break;
         case 7:
             char tmp_str[mem_block];
@@ -140,7 +138,6 @@ int main(int c, char** arg){
                     }
                 }
             }
-            goto end;
             break;
         case 8:
             char tmp_str1[mem_block];
@@ -164,27 +161,29 @@ int main(int c, char** arg){
                     print(book->data, i);
                 }
             }
-            goto end;
+            break;
+        case 9:
             break;
         default:
             cout << "Incorrect command" << endl;
-            goto end;
-            break;
+            return 1;
     }
-    loc_loop:
 
+
+    if(d == 9){
         loop(book, input, c, arg);
+    }
 
-    end:
-        file.close();
+    file.close();
 
-        fstream fileIn;
-        fileIn.open(file_name, std::ofstream::out | std::ofstream::trunc);
+    fstream fileIn;
+    fileIn.open(file_name, std::ofstream::out | std::ofstream::trunc);
 
-        save(&fileIn, book);
+    save(&fileIn, book);
 
-        deleteVector(book);
-        delete[](input);
-        fileIn.close();
+    deleteVector(book);
+    delete[](input);
+    fileIn.close();
+
     return 0;
 }

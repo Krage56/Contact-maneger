@@ -91,58 +91,57 @@ bool EditContact(Vector *v){
     name = nameParser(v, true);
     int index_name = findName(v, name);
 
-    cout << "Edit contact field\n"
-            "1. Edit name\n"
-            "2. Edit phone number\n"
-            "3. Edit group\n"
-            "4. Back\n"
-            "Command: ";
-
     char in[input_mem];
-    goto loc_loop1;
-
-    loc_loop1:
-    cin.getline(in, input_mem);
-    if(strcmp(in, "1") == 0){
-        const int words = 80 + 1;
-        name = nameParser(v, false, true);
-        memcpy(v->data[index_name].name, name, sizeof(char) * (words));
-        return true;
-    }
-    else if(strcmp(in, "2") == 0){
-        const int num = 12 + 1;
-        cout << "Enter new phone number: ";
-        cin.getline(v->data[index_name].telephone, num);
-        return true;
-    }
-    else if(strcmp(in, "3") == 0){
-        const int gr = 30 + 1;
-        char group[gr];
-        cout << "Enter new group`s name: ";
-        cin.getline(group, gr);
-        if(strcmp(group, "COLLEAGUES")  == 0){
-            v->data[index_name].group = Contact::COLLEAGUES;
+    while(true){
+        cout << "Edit contact field\n"
+                "1. Edit name\n"
+                "2. Edit phone number\n"
+                "3. Edit group\n"
+                "4. Back\n"
+                "Command: ";
+        cin.getline(in, input_mem);
+        if(strcmp(in, "1") == 0){
+            const int words = 80 + 1;
+            name = nameParser(v, false, true);
+            memcpy(v->data[index_name].name, name, sizeof(char) * (words));
+            delete[]name;
+            return true;
         }
-        else if(strcmp(group, "FAMILY")  == 0){
-            v->data[index_name].group = Contact::FAMILY;
+        else if(strcmp(in, "2") == 0){
+            const int num = 12 + 1;
+            cout << "Enter new phone number: ";
+            cin.getline(v->data[index_name].telephone, num);
+            delete[]name;
+            return true;
         }
-        else if(strcmp(group, "FRIENDS")  == 0){
-            v->data[index_name].group = Contact::FRIENDS;
+        else if(strcmp(in, "3") == 0){
+            const int gr = 30 + 1;
+            char group[gr];
+            cout << "Enter new group`s name: ";
+            cin.getline(group, gr);
+            if(strcmp(group, "COLLEAGUES")  == 0){
+                v->data[index_name].group = Contact::COLLEAGUES;
+            }
+            else if(strcmp(group, "FAMILY")  == 0){
+                v->data[index_name].group = Contact::FAMILY;
+            }
+            else if(strcmp(group, "FRIENDS")  == 0){
+                v->data[index_name].group = Contact::FRIENDS;
+            }
+            else{
+                v->data[index_name].group = Contact::NO_GROUP;
+            }
+            delete[]name;
+            return true;
+        }
+        else if(strcmp(in, "4") == 0){
+            delete[]name;
+            return true;
         }
         else{
-            v->data[index_name].group = Contact::NO_GROUP;
+            cout << "Enter the correct command, please: ";
         }
     }
-    else if(strcmp(in, "4") == 0){
-        return true;
-    }
-    else{
-        cout << "Enter the correct command, please: ";
-        goto loc_loop1;
-    }
-
-    delete[]name;
-    return false;
 }
 
 bool loop(Vector *v, char *input, int c, char** arg){
@@ -175,76 +174,85 @@ bool loop(Vector *v, char *input, int c, char** arg){
 }
 
 bool print(Vector *v){
-    cout << "Print contact(s):\n"
-            "1. By name\n"
-            "2. By phone number\n"
-            "3. By group\n"
-            "4. All contacts\n"
-            "5. Back\n"
-            "Comand: ";
     char *input = new char[input_mem];
-    goto loc_loop1;
-    loc_loop1:
-    cin.getline(input, input_mem);
-    if(strcmp(input, "1") == 0){
-        cout << "Enter the name: ";
+    bool f = true;
+    while(f){
+        cout << "Print contact(s):\n"
+                "1. By name\n"
+                "2. By phone number\n"
+                "3. By group\n"
+                "4. All contacts\n"
+                "5. Back\n"
+                "Comand: ";
         cin.getline(input, input_mem);
-        int index = findName(v, input);
-        if(index != -1){
-            print(v->data, index);
+        if(strcmp(input, "1") == 0){
+            cout << "Enter the name: ";
+            cin.getline(input, input_mem);
+            int index = findName(v, input);
+            if(index != -1){
+                print(v->data, index);
+                f = false;
+            }
+            else{
+                cout << "It`s no such contact\n";
+            }
+
         }
-        else{
-            cout << "It`s no such contact\n";
-        }
-    }
-    else if(strcmp(input, "2") == 0){
-        cout << "Enter the telephone: ";
-        cin.getline(input, input_mem);
-        int index = findTelephone(v, input);
-        if(index != -1){
-            print(v->data, index);
-        }
-        else{
-            cout << "It`s no such contact\n";
-        }
-    }
-    else if(strcmp(input, "3") == 0){
-        loc_loop2:
-        cout << "Enter group`s name: ";
-        cin.getline(input, input_mem);
-        int obj = -1;
-        if(strcmp(input, "NO_GROUP") == 0){
-            obj = Contact::NO_GROUP;
-        }
-        else if (strcmp(input, "FAMILY") == 0) {
-            obj = Contact::FAMILY;
-        }
-        else if(strcmp(input, "FRIENDS") == 0){
-            obj = Contact::FRIENDS;
-        }
-        else if(strcmp(input, "COLLEAGUES") == 0){
-            obj = Contact::COLLEAGUES;
-        }
-        else{
-            cout << "Incorrect group`s name\n";
-            goto loc_loop2;
-        }
-        for(int i = 0; i < getSize(v); i++){
-            if(v->data[i].group == obj){
-                print(v->data, i);
+        else if(strcmp(input, "2") == 0){
+            cout << "Enter the telephone: ";
+            cin.getline(input, input_mem);
+            int index = findTelephone(v, input);
+            if(index != -1){
+                print(v->data, index);
+                f = false;
+            }
+            else{
+                cout << "It`s no such contact\n";
             }
         }
-    }
-    else if(strcmp(input, "4") == 0){
-        for(int i = 0; i < getSize(v); i++){
-            print(v->data, i);
+        else if(strcmp(input, "3") == 0){
+            f = false;
+            cout << "Enter group`s name: ";
+            cin.getline(input, input_mem);
+            int obj = -1;
+            if(strcmp(input, "NO_GROUP") == 0){
+                obj = Contact::NO_GROUP;
+
+            }
+            else if (strcmp(input, "FAMILY") == 0) {
+                obj = Contact::FAMILY;
+
+            }
+            else if(strcmp(input, "FRIENDS") == 0){
+                obj = Contact::FRIENDS;
+            }
+            else if(strcmp(input, "COLLEAGUES") == 0){
+                obj = Contact::COLLEAGUES;
+            }
+            else{
+                cout << "Incorrect group`s name\n";
+                f = true;
+            }
+            if (obj != -1){
+                for(int i = 0; i < getSize(v); i++){
+                    if(v->data[i].group == obj){
+                        print(v->data, i);
+                    }
+                }
+            }
         }
-    }
-    else if(strcmp(input, "5") == 0){
-        return true;
-    }
-    else{
-        goto loc_loop1;
+        else if(strcmp(input, "4") == 0){
+            for(int i = 0; i < getSize(v); i++){
+                print(v->data, i);
+            }
+            f = false;
+        }
+        else if(strcmp(input, "5") == 0){
+            f = false;
+        }
+        else{
+            f = true;
+        }
     }
     delete[]input;
     return false;
